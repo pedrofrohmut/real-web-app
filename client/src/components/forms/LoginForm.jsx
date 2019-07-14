@@ -1,92 +1,95 @@
-import React, { useState } from "react"
+import React from "react"
 import { Form, Button } from "semantic-ui-react"
 import Validator from "validator"
 import InlineError from "../messages/InlineError"
 import PropTypes from "prop-types"
 
-const INITIAL_ERRORS = {
-  email: "",
-  password: "",
-}
-
-const INITIAL_DATA = {
-  email: "",
-  password: "",
-}
-
 const isValidPassword = password => password !== ""
 
 const isValidEmail = email => Validator.isEmail(email)
 
-const LoginForm = ({ onSubmit }) => {
-  const [data, setData] = useState(INITIAL_DATA)
-  const [errors, setErrors] = useState(INITIAL_ERRORS)
-
-  // const [loading, setLoading] = useState(false)
-
-  const isValidForm = () => {
-    setErrors({
-      password: isValidPassword(data.password)
-        ? ""
-        : "Password cannot be blank",
-      email: isValidEmail(data.email) ? "" : "Invalid E-mail",
-    })
-
-    if (!isValidEmail(data.email)) {
-      return false
+class LoginForm extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: "",
+      password: "",
+      errors: {
+        email: "",
+        password: "",
+      },
     }
-
-    if (!isValidPassword(data.password)) {
-      return false
-    }
-
-    return true
   }
 
-  const handleSubmit = (e) => {
+  isValidForm = () => {
+    const email = isValidEmail(this.state.email) ? "" : "Invalid E-mail"
+    const password = isValidPassword(this.state.password)
+      ? ""
+      : "Password cannot be blank"
+
+    this.setState(state => ({
+      errors: { email, password },
+    }))
+
+    if (!email && !password) {
+      return true
+    }
+    return false
+  }
+
+  handleSubmit = (e) => {
     e.preventDefault()
-    if (isValidForm()) {
-      onSubmit({ email: data.email, password: data.password })
+    const { email, password } = this.state
+    if (this.isValidForm()) {
+      this.props.onSubmit({ email, password })
     }
   }
 
-  const { email, password } = data
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }
 
-  return (
-    <Form className="LoginForm" onSubmit={e => handleSubmit(e)}>
-      <Form.Field error={errors.email !== ""}>
-        <label>E-mail</label>
+  render() {
+    const { errors } = this.state
 
-        <input
-          type="email"
-          name="email"
-          id="email"
-          placeholder="example@email.com"
-          value={email}
-          onChange={e => setData({ ...data, email: e.target.value })}
-        />
+    return (
+      <Form className="LoginForm" onSubmit={this.handleSubmit}>
+        <Form.Field error={errors.email !== ""}>
+          <label>E-mail</label>
 
-        {errors.email && <InlineError text={errors.email} />}
-      </Form.Field>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="example@email.com"
+            value={this.state.email}
+            onChange={this.handleChange}
+          />
 
-      <Form.Field error={errors.password !== ""}>
-        <label>Password</label>
+          {errors.email && <InlineError text={errors.email} />}
+        </Form.Field>
 
-        <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="your user password"
-          value={password}
-          onChange={e => setData({ ...data, password: e.target.value })}
-        />
+        <Form.Field error={errors.password !== ""}>
+          <label>Password</label>
 
-        {errors.password && <InlineError text={errors.password} />}
-      </Form.Field>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="your user password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
 
-      <Button primary>Log in</Button>
-    </Form>
-  )
+          {errors.password && <InlineError text={errors.password} />}
+        </Form.Field>
+
+        <Button primary>Log in</Button>
+      </Form>
+    )
+  }
 }
 
 LoginForm.propTypes = {

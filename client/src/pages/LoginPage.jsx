@@ -4,7 +4,6 @@ import LoginForm from "../components/forms/LoginForm"
 
 const LoginPage = () => {
   const handleSubmit = ({ email, password }) => {
-    console.log(email, password)
   }
 
   return (
