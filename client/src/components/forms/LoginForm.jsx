@@ -1,5 +1,5 @@
 import React from "react"
-import { Form, Button } from "semantic-ui-react"
+import { Form, Button, Message } from "semantic-ui-react"
 import Validator from "validator"
 import InlineError from "../messages/InlineError"
 import PropTypes from "prop-types"
@@ -8,40 +8,44 @@ const isValidPassword = password => password !== ""
 
 const isValidEmail = email => Validator.isEmail(email)
 
+const isValidForm = (data) => {
+  const email = isValidEmail(data.email) ? "" : "Invalid E-mail"
+  const password = isValidPassword(data.password)
+    ? ""
+    : "Password cannot be blank"
+
+  return {
+    email,
+    password,
+  }
+}
+
 class LoginForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       email: "",
       password: "",
-      errors: {
-        email: "",
-        password: "",
-      },
+      errors: {},
+      loading: false,
     }
-  }
-
-  isValidForm = () => {
-    const email = isValidEmail(this.state.email) ? "" : "Invalid E-mail"
-    const password = isValidPassword(this.state.password)
-      ? ""
-      : "Password cannot be blank"
-
-    this.setState(state => ({
-      errors: { email, password },
-    }))
-
-    if (!email && !password) {
-      return true
-    }
-    return false
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
     const { email, password } = this.state
-    if (this.isValidForm()) {
-      this.props.onSubmit({ email, password })
+
+    const errors = isValidForm({ email, password })
+    this.setState({ errors: { ...this.state.errors, ...errors } })
+
+    if (!errors.email && !errors.password) {
+      this.setState({ loading: true })
+      this.props.onSubmit({ email, password }).catch((err) => {
+        this.setState({
+          errors: { global: err.response.data.error.global },
+          loading: false,
+        })
+      })
     }
   }
 
@@ -52,11 +56,22 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    const { errors } = this.state
+    const { errors, loading } = this.state
 
     return (
-      <Form className="LoginForm" onSubmit={this.handleSubmit}>
-        <Form.Field error={errors.email !== ""}>
+      <Form
+        className="LoginForm"
+        onSubmit={this.handleSubmit}
+        loading={loading}
+      >
+        {errors.global && (
+          <Message negative>
+            <Message.Header>Something went wrong</Message.Header>
+            <p>{errors.global}</p>
+          </Message>
+        )}
+
+        <Form.Field error={errors.email && errors.email !== ""}>
           <label>E-mail</label>
 
           <input
@@ -71,7 +86,7 @@ class LoginForm extends React.Component {
           {errors.email && <InlineError text={errors.email} />}
         </Form.Field>
 
-        <Form.Field error={errors.password !== ""}>
+        <Form.Field error={errors.password && errors.password !== ""}>
           <label>Password</label>
 
           <input
