@@ -1,9 +1,12 @@
 import React from "react"
 import { Container } from "semantic-ui-react"
+import { connect } from "react-redux"
 import LoginForm from "../components/forms/LoginForm"
+import { login } from "../store/actions/auth"
 
-const LoginPage = () => {
+const LoginPage = ({ login, history }) => {
   const handleSubmit = ({ email, password }) => {
+    login({ email, password }).then(() => history.push("/"))
   }
 
   return (
@@ -15,4 +18,14 @@ const LoginPage = () => {
     </div>
   )
 }
-export default LoginPage
+
+LoginPage.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+}
+
+export default connect(
+  undefined,
+  { login },
+)(LoginPage)
