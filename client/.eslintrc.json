@@ -20,6 +20,7 @@
   "rules": {
     "semi": ["error", "never"],
     "quotes": ["error", "double", { "avoidEscape": true }],
+    "func-names": "off",
     "react/jsx-filename-extension": [
       "error",
       {

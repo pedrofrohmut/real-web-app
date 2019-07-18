@@ -6,7 +6,9 @@ import { login } from "../store/actions/auth"
 import PropTypes from "prop-types"
 
 const LoginPage = ({ login, history }) => {
-  const handleSubmit = ({ email, password }) => login({ email, password }).then(() => history.push("/"))
+  const handleSubmit = ({ email, password }) =>
+    login({ email, password })
+      .then(() => history.push("/"))
 
   return (
     <div className="LoginPage">

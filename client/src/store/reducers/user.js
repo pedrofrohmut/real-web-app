@@ -1,9 +1,16 @@
-import { USER_LOGGED_IN } from "../actions/types"
+import { USER_LOGGED_IN, USER_LOGGED_OUT } from "../actions/types"
 
-export default function user(state = {}, action = {}) {
+export default function userReducer(state = {}, action) {
   switch (action.type) {
     case USER_LOGGED_IN:
-      return action.user
+      return {
+        email: action.user.email,
+        token: action.user.token,
+      }
+
+    case USER_LOGGED_OUT:
+      return {}
+
     default:
       return state
   }

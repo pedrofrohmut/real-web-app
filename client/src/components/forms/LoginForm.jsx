@@ -26,7 +26,11 @@ class LoginForm extends React.Component {
     this.state = {
       email: "",
       password: "",
-      errors: {},
+      errors: {
+        email: "",
+        password: "",
+        global: "",
+      },
       loading: false,
     }
   }
@@ -36,17 +40,22 @@ class LoginForm extends React.Component {
     const { email, password } = this.state
 
     const errors = isValidForm({ email, password })
-    this.setState({ errors: { ...this.state.errors, ...errors } })
+    this.setState({
+      errors: { email: errors.email, password: errors.password },
+    })
 
     if (!errors.email && !errors.password) {
       this.setState({ loading: true })
       this.props.onSubmit({ email, password }).catch((err) => {
-        this.setState({
-          errors: { global: err.response.data.error.global },
+        console.log(err.response)
+        this.setState(() => ({
+          errors: { global: err.response.data.errors.global },
           loading: false,
-        })
+        }))
       })
     }
+
+    e.preventDefault()
   }
 
   handleChange = (e) => {
@@ -71,7 +80,7 @@ class LoginForm extends React.Component {
           </Message>
         )}
 
-        <Form.Field error={errors.email && errors.email !== ""}>
+        <Form.Field>
           <label>E-mail</label>
 
           <input
@@ -86,7 +95,7 @@ class LoginForm extends React.Component {
           {errors.email && <InlineError text={errors.email} />}
         </Form.Field>
 
-        <Form.Field error={errors.password && errors.password !== ""}>
+        <Form.Field>
           <label>Password</label>
 
           <input
