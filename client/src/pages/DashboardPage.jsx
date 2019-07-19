@@ -5,7 +5,10 @@ import ConfirmEmailMessage from "../components/messages/ConfirmEmailMessage"
 import { Container } from "semantic-ui-react"
 
 const DashboardPage = ({ isConfirmed }) => (
-  <Container>{!isConfirmed && <ConfirmEmailMessage />}</Container>
+  <Container>
+    <h1>Dashboard</h1>
+    {!isConfirmed && <ConfirmEmailMessage />}
+  </Container>
 )
 
 DashboardPage.propTypes = {
