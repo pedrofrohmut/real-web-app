@@ -23,6 +23,7 @@
 body {
   overflow-x: hidden;
   min-height: 100vh;
+  padding: 25px 0 0 0;
   background-color: var(--fullWhite);
   color: var(--grey2);
   line-height: 1.6;

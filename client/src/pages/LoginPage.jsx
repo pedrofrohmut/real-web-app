@@ -8,7 +8,7 @@ import PropTypes from "prop-types"
 const LoginPage = ({ login, history }) => {
   const handleSubmit = ({ email, password }) =>
     login({ email, password })
-      .then(() => history.push("/"))
+      .then(() => history.push("/dashboard"))
 
   return (
     <div className="LoginPage">
