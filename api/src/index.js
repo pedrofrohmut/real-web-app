@@ -24,4 +24,5 @@ app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"))
 })
 
+// eslint-disable-next-line no-console
 app.listen(8080, () => console.log("Running on local host 8080 .... "))

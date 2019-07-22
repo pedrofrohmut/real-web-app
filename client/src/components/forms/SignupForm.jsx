@@ -40,8 +40,6 @@ class SignupForm extends Component {
 
     const { email, password } = this.state.data
 
-    console.log("SUBMIT FORM", email, password)
-
     const errors = isValidForm({ email, password })
     this.setState({
       errors: {
@@ -54,7 +52,6 @@ class SignupForm extends Component {
       this.setState({ loading: true })
 
       this.props.onSubmit({ email, password }).catch((err) => {
-        console.log(err.response.data.errors)
         this.setState(() => ({
           errors: { ...err.response.data.errors },
           loading: false,
