@@ -16,7 +16,11 @@ const HomePage = function ({ isAuthenticated, logout }) {
             Log Out
           </Button>
         ) : (
-          <Link to="/login">Log in</Link>
+          <div>
+            <Link to="/login">Log in</Link>
+            {" or "}
+            <Link to="/signup">Sign Up</Link>
+          </div>
         )}
       </Container>
     </div>

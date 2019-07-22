@@ -1,15 +1,16 @@
-import React from "react"
-import { Form, Button, Message } from "semantic-ui-react"
+/* eslint-disable react/no-access-state-in-setstate */
+import React, { Component } from "react"
+import { Form, Button } from "semantic-ui-react"
 import Validator from "validator"
-import InlineError from "../messages/InlineError"
 import PropTypes from "prop-types"
-
-const isValidPassword = password => password !== ""
+import InlineError from "../messages/InlineError"
 
 const isValidEmail = email => Validator.isEmail(email)
 
+const isValidPassword = password => password !== ""
+
 const isValidForm = (data) => {
-  const email = isValidEmail(data.email) ? "" : "Invalid E-mail"
+  const email = isValidEmail(data.email) ? "" : "Invalid e-mail"
   const password = isValidPassword(data.password)
     ? ""
     : "Password cannot be blank"
@@ -20,78 +21,76 @@ const isValidForm = (data) => {
   }
 }
 
-class LoginForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
+class SignupForm extends Component {
+  state = {
+    data: {
       email: "",
       password: "",
-      errors: {
-        email: "",
-        password: "",
-        global: "",
-      },
-      loading: false,
-    }
+    },
+    loading: false,
+    errors: {
+      email: "",
+      password: "",
+      global: "",
+    },
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const { email, password } = this.state
+
+    const { email, password } = this.state.data
+
+    console.log("SUBMIT FORM", email, password)
 
     const errors = isValidForm({ email, password })
     this.setState({
-      errors: { email: errors.email, password: errors.password },
+      errors: {
+        email: errors.email,
+        password: errors.password,
+      },
     })
 
     if (!errors.email && !errors.password) {
       this.setState({ loading: true })
-      // eslint-disable-next-line react/destructuring-assignment
+
       this.props.onSubmit({ email, password }).catch((err) => {
-        console.log(err.response)
+        console.log(err.response.data.errors)
         this.setState(() => ({
-          errors: { global: err.response.data.errors.global },
+          errors: { ...err.response.data.errors },
           loading: false,
         }))
       })
     }
-
-    e.preventDefault()
   }
 
   handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value,
+      ...this.state,
+      data: {
+        ...this.state.data,
+        [e.target.name]: e.target.value,
+      },
     })
   }
 
   render() {
-    const {
-      email, password, errors, loading,
-    } = this.state
+    const { data, loading, errors } = this.state
 
     return (
       <Form
-        className="LoginForm"
         onSubmit={this.handleSubmit}
         loading={loading}
+        className="SignupForm"
       >
-        {errors.global && (
-          <Message negative>
-            <Message.Header>Something went wrong</Message.Header>
-            <p>{errors.global}</p>
-          </Message>
-        )}
-
         <Form.Field>
-          <label>E-mail</label>
+          <label htmlFor="email">E-Mail</label>
 
           <input
             type="email"
-            name="email"
             id="email"
+            name="email"
             placeholder="example@email.com"
-            value={email}
+            value={data.email}
             onChange={this.handleChange}
           />
 
@@ -99,28 +98,28 @@ class LoginForm extends React.Component {
         </Form.Field>
 
         <Form.Field>
-          <label>Password</label>
+          <label htmlFor="password">Password</label>
 
           <input
             type="password"
-            name="password"
             id="password"
-            placeholder="your user password"
-            value={password}
+            name="password"
+            placeholder="Make a secure password"
+            value={data.password}
             onChange={this.handleChange}
           />
 
           {errors.password && <InlineError text={errors.password} />}
         </Form.Field>
 
-        <Button primary>Log in</Button>
+        <Button primary>Sign Up</Button>
       </Form>
     )
   }
 }
 
-LoginForm.propTypes = {
+SignupForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 }
 
-export default LoginForm
+export default SignupForm

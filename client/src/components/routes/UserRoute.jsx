@@ -6,8 +6,13 @@ import { Route, Redirect } from "react-router-dom"
 const UserRoute = ({ isAuthenticated, component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props => (isAuthenticated ? <Component {...props} /> : <Redirect to="/" />)
-    }
+    render={(props) => {
+      if (isAuthenticated) {
+        return <Component {...props} />
+      } else {
+        return <Redirect to="/" />
+      }
+    }}
   />
 )
 
