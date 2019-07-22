@@ -28,6 +28,7 @@ schema.methods.generateJWT = function generateJWT() {
   return jwt.sign(
     {
       email: this.email,
+      isConfirmed: this.isConfirmed,
     },
     process.env.JWT_SECRET
   )

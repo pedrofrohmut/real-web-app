@@ -4,6 +4,7 @@ import { createStore, applyMiddleware } from "redux"
 import { Provider } from "react-redux"
 import { composeWithDevTools } from "redux-devtools-extension"
 import thunk from "redux-thunk"
+import decode from "jwt-decode"
 import "semantic-ui-css/semantic.min.css"
 import "./index.css"
 import App from "./App"
@@ -16,7 +17,15 @@ const store = createStore(
 )
 
 if (localStorage.wormbooksJWT) {
-  store.dispatch(userLoggedIn({ token: localStorage.wormbooksJWT }))
+  const payload = decode(localStorage.wormbooksJWT)
+  // console.log("PAYLOAD", payload)
+  store.dispatch(
+    userLoggedIn({
+      token: localStorage.wormbooksJWT,
+      email: payload.email,
+      isConfirmed: payload.isConfirmed,
+    }),
+  )
 }
 
 ReactDOM.render(

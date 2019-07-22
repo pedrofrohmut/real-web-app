@@ -6,6 +6,7 @@ export default function userReducer(state = {}, action) {
       return {
         email: action.user.email,
         token: action.user.token,
+        isConfirmed: action.user.isConfirmed,
       }
 
     case USER_LOGGED_OUT:

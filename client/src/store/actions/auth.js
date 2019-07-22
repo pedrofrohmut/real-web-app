@@ -1,12 +1,13 @@
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from "./types"
 import api from "../../api/api"
 
-export const userLoggedIn = function ({ email, token }) {
+export const userLoggedIn = function ({ email, token, isConfirmed }) {
   return {
     type: USER_LOGGED_IN,
     user: {
       email,
       token,
+      isConfirmed,
     },
   }
 }
@@ -30,5 +31,14 @@ export const logout = function () {
   return function (dispatch) {
     localStorage.removeItem("wormbooksJWT")
     dispatch(userLoggedOut())
+  }
+}
+
+export const confirm = function (token) {
+  return function (dispatch) {
+    return api.user.confirm(token).then((user) => {
+      localStorage.wormbooksJWT = user.token
+      dispatch(userLoggedIn({ email: user.email, token: user.token }))
+    })
   }
 }
