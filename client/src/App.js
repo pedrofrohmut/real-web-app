@@ -7,6 +7,8 @@ import LoginPage from "./pages/LoginPage"
 import DashboardPage from "./pages/DashboardPage"
 import SignupPage from "./pages/SignupPage"
 import ConfirmationPage from "./pages/ConfirmationPage"
+import ForgotPasswordPage from "./pages/ForgotPasswordPage"
+import ResetPasswordPage from "./pages/ResetPasswordPage"
 import UserRoute from "./components/routes/UserRoute"
 import GuestRoute from "./components/routes/GuestRoute"
 
@@ -40,6 +42,12 @@ const App = () => (
       <Route exact path="/confirmation/:token" component={ConfirmationPage} />
       <GuestRoute exact path="/login" component={LoginPage} />
       <GuestRoute exact path="/signup" component={SignupPage} />
+      <GuestRoute
+        excat
+        path="/forgot_password"
+        component={ForgotPasswordPage}
+      />
+      <GuestRoute exact path="/reset_password" component={ResetPasswordPage} />
       <UserRoute exact path="/dashboard" component={DashboardPage} />
     </Switch>
   </BrowserRouter>

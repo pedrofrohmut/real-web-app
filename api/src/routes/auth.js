@@ -1,5 +1,6 @@
 import express from "express"
 import User from "../models/User"
+import { sendResetPasswordEmail } from "../utils/mailer"
 
 const router = express.Router()
 
@@ -33,6 +34,21 @@ router.post("/confirmation", (req, res) => {
       ? res.status(200).json({ user: user.toAuthJSON() })
       : res.status(400).json({})
   )
+})
+
+router.post("/reset_password_request", (req, res) => {
+  const { email } = req.body
+
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      res
+        .status(400)
+        .json({ errors: { global: "No user with this e-mail not found." } })
+    }
+
+    sendResetPasswordEmail(user)
+    res.status(200).json({})
+  })
 })
 
 export default router

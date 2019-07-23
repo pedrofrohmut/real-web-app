@@ -35,3 +35,25 @@ export function sendConfirmationEmail(user) {
     }
   })
 }
+
+export function sendResetPasswordEmail(user) {
+  const transporter = setup()
+
+  const email = {
+    from,
+    to: user.email,
+    subject: "WormBooks - Reset Password",
+    text: `
+      To reset password follow this link.
+
+      ${user.generateResetPasswordURL()}
+    `,
+  }
+
+  transporter.sendMail(email).then(info => {
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.log("SEND_MAIL -> Message sent", info.messageId)
+    }
+  })
+}

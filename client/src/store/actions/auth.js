@@ -42,3 +42,9 @@ export const confirm = function (token) {
     })
   }
 }
+
+export const resetPasswordRequest = function ({ email }) {
+  return function () {
+    return api.user.resetPasswordRequest(email)
+  }
+}

@@ -34,6 +34,18 @@ schema.methods.generateJWT = function generateJWT() {
   )
 }
 
+schema.methods.generateResetPasswordToken = function generateResetPasswordToken() {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1s",
+    }
+  )
+}
+
 schema.methods.setConfirmationToken = function setConfirmationToken() {
   this.confirmationToken = this.generateJWT()
 }
@@ -56,6 +68,13 @@ schema.plugin(uniqueValidator, { message: "This e-mail is already taken" })
 schema.methods.generateConfirmationURL = function generateConfirmationURL() {
   const confirmationURL = `${process.env.HOST}/confirmation/${this.confirmationToken}`
   return confirmationURL
+}
+
+schema.methods.generateResetPasswordURL = function generateResetPasswordURL() {
+  const resetPasswordURL = `${
+    process.env.HOST
+  }/reset_password/${this.generateResetPasswordToken()}`
+  return resetPasswordURL
 }
 
 export default mongoose.model("User", schema)
