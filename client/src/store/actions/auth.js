@@ -48,3 +48,15 @@ export const resetPasswordRequest = function ({ email }) {
     return api.user.resetPasswordRequest(email)
   }
 }
+
+export const validateToken = function (token) {
+  return function () {
+    return api.user.validateToken(token)
+  }
+}
+
+export const resetPassword = function ({ password, token }) {
+  return function () {
+    return api.user.resetPassword({ password, token })
+  }
+}

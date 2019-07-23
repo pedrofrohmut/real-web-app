@@ -47,7 +47,11 @@ const App = () => (
         path="/forgot_password"
         component={ForgotPasswordPage}
       />
-      <GuestRoute exact path="/reset_password" component={ResetPasswordPage} />
+      <GuestRoute
+        exact
+        path="/reset_password/:token"
+        component={ResetPasswordPage}
+      />
       <UserRoute exact path="/dashboard" component={DashboardPage} />
     </Switch>
   </BrowserRouter>
