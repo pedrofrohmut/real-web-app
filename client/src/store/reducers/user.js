@@ -1,6 +1,12 @@
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from "../actions/types"
 
-export default function userReducer(state = {}, action) {
+const INITIAL_STATE = {
+  email: undefined,
+  token: undefined,
+  isConfirmed: false,
+}
+
+function userReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case USER_LOGGED_IN:
       return {
@@ -16,3 +22,5 @@ export default function userReducer(state = {}, action) {
       return state
   }
 }
+
+export default userReducer

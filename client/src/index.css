@@ -23,7 +23,6 @@
 body {
   overflow-x: hidden;
   min-height: 100vh;
-  padding: 25px 0 0 0;
   background-color: var(--fullWhite);
   color: var(--grey2);
   line-height: 1.6;
@@ -46,4 +45,17 @@ a {
 
 ul {
   list-style: none;
+}
+
+.dev-nav-title {
+  padding-left: 15px;
+}
+
+ul.dev-nav {
+  padding-left: 15px;
+}
+
+ul.dev-nav li {
+  display: inline;
+  margin-right: 15px;
 }
