@@ -218,8 +218,7 @@ class BookForm extends React.Component {
                   alignItems: "center",
                 }}
               >
-                <NoImage />
-                {/* <Image size="small" src={data.book.cover} /> */}
+                <Image size="small" src={data.book.cover} />
                 {data.covers > 1 && (
                   /* eslint-disable-next-line */
                   <a role="button" onClick={this.handleChangeCover}>
