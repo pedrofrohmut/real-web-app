@@ -1,6 +1,7 @@
 import React from "react"
 import axios from "axios"
-import { Form, Dropdown } from "semantic-ui-react"
+import { Form, Dropdown, Segment } from "semantic-ui-react"
+import PropTypes from "prop-types"
 
 const INITIAL_OPTIONS = [
   {
@@ -44,7 +45,7 @@ class SearchBookForm extends React.Component {
   fetchOptions = () => {
     const { query } = this.state.data
 
-    if (query === "") {
+    if (!query) {
       return
     }
 
@@ -58,26 +59,62 @@ class SearchBookForm extends React.Component {
       .then((books) => {
         const options = []
         const booksHash = {}
+
+        books.forEach((book) => {
+          booksHash[book.goodreadsId] = book
+          options.push({
+            key: book.goodreadsId,
+            value: book.goodreadsId,
+            text: book.title,
+          })
+        })
+
+        this.setState({
+          isLoading: false,
+          data: {
+            options,
+            books: booksHash,
+          },
+        })
       })
   }
 
+  handleChange = (e, dropdown) => {
+    this.setState(state => ({
+      ...state,
+      data: {
+        ...state.data,
+        query: dropdown.value,
+      },
+    }))
+
+    this.props.onBookSelect(this.state.data.books[dropdown.value])
+  }
+
   render() {
-    const { data, isLoading, errors } = this.state
+    const { data, isLoading } = this.state
 
     return (
-      <Form>
-        <Dropdown
-          search
-          fluid
-          placeholder="Search book by title"
-          value={data.query}
-          onSearchChange={this.onSearchChange}
-          options={data.options}
-          loading={isLoading}
-        />
-      </Form>
+      <Segment>
+        <Form>
+          <Dropdown
+            search
+            fluid
+            placeholder="Search book by title"
+            value={data.query}
+            onSearchChange={this.onSearchChange}
+            options={data.options}
+            loading={isLoading}
+            onChange={this.handleChange}
+          />
+        </Form>
+      </Segment>
     )
   }
+}
+
+SearchBookForm.propTypes = {
+  onBookSelect: PropTypes.func.isRequired,
 }
 
 export default SearchBookForm

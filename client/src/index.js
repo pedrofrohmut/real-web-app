@@ -10,6 +10,7 @@ import "./index.css"
 import App from "./App"
 import rootReducer from "./store/rootReducer"
 import { userLoggedIn } from "./store/actions/auth"
+import { setAuthorizationHeaders } from "./utils/authorizationHeaders"
 
 const store = createStore(
   rootReducer,
@@ -18,14 +19,13 @@ const store = createStore(
 
 if (localStorage.wormbooksJWT) {
   const payload = decode(localStorage.wormbooksJWT)
-  // console.log("PAYLOAD", payload)
-  store.dispatch(
-    userLoggedIn({
-      token: localStorage.wormbooksJWT,
-      email: payload.email,
-      isConfirmed: payload.isConfirmed,
-    }),
-  )
+  const user = {
+    token: localStorage.wormbooksJWT,
+    email: payload.email,
+    isConfirmed: payload.isConfirmed,
+  }
+  setAuthorizationHeaders(localStorage.wormbooksJWT)
+  store.dispatch(userLoggedIn(user))
 }
 
 ReactDOM.render(
