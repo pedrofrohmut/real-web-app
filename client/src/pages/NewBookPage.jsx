@@ -1,4 +1,5 @@
 import React from "react"
+import axios from "axios"
 import { Container } from "semantic-ui-react"
 import SearchBookForm from "../components/forms/SearchBookForm"
 import BookForm from "../components/forms/BookForm"
@@ -9,8 +10,19 @@ class NewBookPage extends React.Component {
   }
 
   handleBookSelect = (book) => {
-    console.log("BOOK SELECT", book)
     this.setState({ book })
+
+    axios
+      .get(`/api/books/fetchPages?goodreadsId=${book.goodreadsId}`)
+      .then(response => response.data.pages)
+      .then(pages =>
+        this.setState({
+          ...this.state,
+          book: {
+            ...book,
+            pages,
+          },
+        }))
   }
 
   handleAddBook = newBook => console.log("ADD BOOK")

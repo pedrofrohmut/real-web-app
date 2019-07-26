@@ -8,9 +8,7 @@ export default {
         .then(response => response.data.user),
 
     signup: newUser =>
-      axios
-        .post("/api/users", { newUser })
-        .then(response => response.data.user),
+      axios.post("/api/users", { newUser }).then(response => response.data.user),
 
     confirm: token =>
       axios
@@ -24,5 +22,9 @@ export default {
 
     resetPassword: ({ password, token }) =>
       axios.post("/api/auth/reset_password", { password, token }),
+  },
+  books: {
+    fetchAll: () =>
+      axios.get("/api/books").then(response => response.data.books),
   },
 }

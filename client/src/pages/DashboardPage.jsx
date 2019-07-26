@@ -5,24 +5,39 @@ import ConfirmEmailMessage from "../components/messages/ConfirmEmailMessage"
 import { Container, Message } from "semantic-ui-react"
 import { allBooksSelector } from "../store/selectors/books"
 import AddBookCta from "../components/ctas/AddBookCta"
+import * as actions from "../store/actions/books"
 
-const DashboardPage = ({ isConfirmed, books }) => (
-  <Container>
-    <h1>Dashboard</h1>
+class DashboardPage extends React.Component {
+  componentDidMount() {
+    this.onInit(this.props)
+  }
 
-    {!isConfirmed && <ConfirmEmailMessage />}
+  onInit = props => props.fetchBooks()
 
-    {isConfirmed && books.length === 0 && (
-      <Message
-        success
-        header="Welcome to the WormBooks"
-        content="Your e-mail is confirmed."
-      />
-    )}
+  render() {
+    const { isConfirmed, books } = this.props
 
-    {books.length === 0 && <AddBookCta />}
-  </Container>
-)
+    return (
+      <Container>
+        <h1>Dashboard</h1>
+
+        {!isConfirmed && <ConfirmEmailMessage />}
+
+        {isConfirmed && books.length === 0 && (
+          <Message
+            success
+            header="Welcome to the WormBooks"
+            content="Your e-mail is confirmed."
+          />
+        )}
+
+        {books.length === 0 && <AddBookCta />}
+
+        {books.length > 0 && <p>You have books!</p>}
+      </Container>
+    )
+  }
+}
 
 DashboardPage.propTypes = {
   isConfirmed: PropTypes.bool.isRequired,
@@ -31,6 +46,7 @@ DashboardPage.propTypes = {
       title: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
+  fetchBooks: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -38,4 +54,7 @@ const mapStateToProps = state => ({
   books: allBooksSelector(state),
 })
 
-export default connect(mapStateToProps)(DashboardPage)
+export default connect(
+  mapStateToProps,
+  { fetchBooks: actions.fetchBooks },
+)(DashboardPage)

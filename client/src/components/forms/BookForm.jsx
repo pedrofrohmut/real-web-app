@@ -4,7 +4,6 @@ import {
   Form, Button, Grid, Image, Segment,
 } from "semantic-ui-react"
 import InlineError from "../messages/InlineError"
-import NoImage from "../images/NoImage"
 
 const isValidGoodreadId = goodreadsId => goodreadsId !== ""
 
@@ -85,7 +84,7 @@ class BookForm extends React.Component {
     })
   }
 
-  onChange = (e) => {
+  handleChange = (e) => {
     this.setState({
       ...this.state,
       data: {
@@ -97,7 +96,7 @@ class BookForm extends React.Component {
     })
   }
 
-  onChangeNumber = (e) => {
+  handleChangeNumber = (e) => {
     this.setState({
       ...this.state,
       data: {
@@ -157,8 +156,6 @@ class BookForm extends React.Component {
   render() {
     const { data, isLoading, errors } = this.state
 
-    console.log(data.book)
-
     return (
       <Segment>
         <Form className="BookForm" loading={isLoading}>
@@ -199,11 +196,16 @@ class BookForm extends React.Component {
                   <label htmlFor="pages">Pages</label>
 
                   <input
-                    type="number"
+                    type="text"
                     id="pages"
                     name="pages"
                     placeholder="Number of pages"
-                    value={data.book.pages}
+                    disabled={data.book.pages === undefined}
+                    value={
+                      data.book.pages !== undefined
+                        ? data.book.pages
+                        : "Loading..."
+                    }
                     onChange={this.handleChangeNumber}
                   />
 

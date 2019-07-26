@@ -2,10 +2,32 @@ import express from "express"
 import authenticate from "../middlewares/authenticate"
 import request from "request-promise"
 import { parseString } from "xml2js"
+import Book from "../models/Book"
+import parseErrors from "../utils/parseErrors"
 
 const router = express.Router()
 
 router.use(authenticate)
+
+router.get("/", function(req, res) {
+  Book.find({ userId: req.currentUser._id })
+    .then(books => {
+      res.status(200).json({ books })
+    })
+    .catch(err => {
+      res.status(400).json({ errors: parseErrors(err.errors) })
+    })
+})
+
+router.post("/", function(req, res) {
+  Book.create({ ...req.body.book, userId: req.currentUser._id })
+    .then(book => {
+      res.status(200).json({ book })
+    })
+    .catch(err => {
+      res.status(400).json({ errors: parseErrors(err.errors) })
+    })
+})
 
 router.get("/search", (req, res) => {
   const query = req.query.q
@@ -27,31 +49,21 @@ router.get("/search", (req, res) => {
       res.status(200).json({ books })
     })
   })
+})
 
-  // res.status(200).json({
-  //   books: [
-  //     {
-  //       goodreadsId: 1,
-  //       title: "1984",
-  //       authors: "Orwell",
-  //       covers: [
-  //         "https://images.gr-assets.com/books/13489905661/5470.jpg",
-  //         "https://images.gr-assets.com/books/15046119571/9577857.jpg",
-  //       ],
-  //       pages: 198,
-  //     },
-  //     {
-  //       goodreadsId: 2,
-  //       title: "Three Men in a boat",
-  //       authors: "Jerome K. Jerome",
-  //       covers: [
-  //         "https://images.gr-assets.com/books/13627916761/4921.jpg",
-  //         "https://images.gr-assets.com/books/13120368781/627830.jpg",
-  //       ],
-  //       pages: 256,
-  //     },
-  //   ],
-  // })
+router.get("/fetchPages", (req, res) => {
+  const { goodreadsId } = req.query
+  const url = `https://www.goodreads.com/book/show.xml?key=${process.env.GOODREADS_API_KEY}&id=${goodreadsId}`
+  request.get(url).then(result => {
+    parseString(result, function(err, parsedResult) {
+      if (err) {
+        res.status(500).json({ message: "could not be parsed" })
+      }
+      const numPages = parsedResult.GoodreadsResponse.book[0].num_pages[0]
+      const pages = numPages ? parseInt(numPages, 10) : 0
+      res.status(200).json({ pages })
+    })
+  })
 })
 
 export default router
