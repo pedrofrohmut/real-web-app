@@ -140,7 +140,7 @@ class BookForm extends React.Component {
         isLoading: true,
       })
 
-      this.props.onSubmit().catch((err) => {
+      this.props.onSubmit(this.state.data.book).catch((err) => {
         this.setState(state => ({
           ...state,
           errors: {
@@ -158,7 +158,11 @@ class BookForm extends React.Component {
 
     return (
       <Segment>
-        <Form className="BookForm" loading={isLoading}>
+        <Form
+          onSubmit={this.handleSubmit}
+          className="BookForm"
+          loading={isLoading}
+        >
           <Grid columns={2}>
             <Grid.Row>
               <Grid.Column>

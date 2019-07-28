@@ -31,9 +31,7 @@ class DashboardPage extends React.Component {
           />
         )}
 
-        {books.length === 0 && <AddBookCta />}
-
-        {books.length > 0 && <p>You have books!</p>}
+        {books.length > 0 ? <p>You have books!</p> : <AddBookCta />}
       </Container>
     )
   }

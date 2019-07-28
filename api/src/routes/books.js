@@ -20,7 +20,8 @@ router.get("/", function(req, res) {
 })
 
 router.post("/", function(req, res) {
-  Book.create({ ...req.body.book, userId: req.currentUser._id })
+  console.log("REQ BODY", req.body)
+  Book.create({ ...req.body.newBook, userId: req.currentUser._id })
     .then(book => {
       res.status(200).json({ book })
     })
