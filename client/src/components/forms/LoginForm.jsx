@@ -48,9 +48,12 @@ class LoginForm extends React.Component {
       this.setState({ loading: true })
       // eslint-disable-next-line react/destructuring-assignment
       this.props.onSubmit({ email, password }).catch((err) => {
-        console.log(err.response)
+        if (err.response.data.errors) {
+          this.setState(() => ({
+            errors: { global: err.response.data.errors.global },
+          }))
+        }
         this.setState(() => ({
-          errors: { global: err.response.data.errors.global },
           loading: false,
         }))
       })

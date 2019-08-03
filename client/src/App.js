@@ -1,7 +1,10 @@
-import React from "react"
-import { connect } from "react-redux"
+import React, { useEffect } from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 import PropTypes from "prop-types"
+import Loader from "react-loader"
+
+import { connect } from "react-redux"
+import * as actions from "./store/actions/user"
 
 import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginPage"
@@ -16,44 +19,66 @@ import UserRoute from "./components/routes/UserRoute"
 import GuestRoute from "./components/routes/GuestRoute"
 import Navbar from "./components/navigation/Navbar"
 
-const App = ({ isAuthenticated }) => (
-  <BrowserRouter>
-    {isAuthenticated && <Navbar />}
+const App = ({ isAuthenticated, isLoading, fetchCurrentUser }) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchCurrentUser()
+    } else {
+      console.log("Not Authenticated")
+    }
+  }, [fetchCurrentUser, isAuthenticated])
 
-    <Switch>
-      <Route exact path="/" component={HomePage} />
+  return (
+    <BrowserRouter>
+      {isAuthenticated && <Navbar />}
 
-      <Route exact path="/confirmation/:token" component={ConfirmationPage} />
+      <Loader loaded={!isLoading}>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
 
-      <GuestRoute exact path="/login" component={LoginPage} />
+          <Route
+            exact
+            path="/confirmation/:token"
+            component={ConfirmationPage}
+          />
 
-      <GuestRoute exact path="/signup" component={SignupPage} />
+          <GuestRoute exact path="/login" component={LoginPage} />
 
-      <GuestRoute
-        excat
-        path="/forgot_password"
-        component={ForgotPasswordPage}
-      />
+          <GuestRoute exact path="/signup" component={SignupPage} />
 
-      <GuestRoute
-        exact
-        path="/reset_password/:token"
-        component={ResetPasswordPage}
-      />
+          <GuestRoute
+            excat
+            path="/forgot_password"
+            component={ForgotPasswordPage}
+          />
 
-      <UserRoute exact path="/dashboard" component={DashboardPage} />
+          <GuestRoute
+            exact
+            path="/reset_password/:token"
+            component={ResetPasswordPage}
+          />
 
-      <UserRoute exact path="/books/new" component={NewBookPage} />
-    </Switch>
-  </BrowserRouter>
-)
+          <UserRoute exact path="/dashboard" component={DashboardPage} />
+
+          <UserRoute exact path="/books/new" component={NewBookPage} />
+        </Switch>
+      </Loader>
+    </BrowserRouter>
+  )
+}
 
 App.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
+  fetchCurrentUser: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.user.token !== undefined,
+  isAuthenticated: state.user.email !== undefined,
+  isLoading: state.user.isLoading,
 })
 
-export default connect(mapStateToProps)(App)
+export default connect(
+  mapStateToProps,
+  { fetchCurrentUser: actions.fetchCurrentUser },
+)(App)

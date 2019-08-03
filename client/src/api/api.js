@@ -24,6 +24,9 @@ export default {
 
     resetPassword: ({ password, token }) =>
       axios.post("/api/auth/reset_password", { password, token }),
+
+    fetchCurrentUser: () =>
+      axios.get("/api/users/current_user").then(response => response.data.user),
   },
   books: {
     fetchAll: () =>

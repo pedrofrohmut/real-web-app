@@ -32,6 +32,7 @@ export const login = function ({ email, password }) {
           email: user.email,
           token: user.token,
           isConfirmed: user.isConfirmed,
+          isLoading: false,
         }),
       )
     })
