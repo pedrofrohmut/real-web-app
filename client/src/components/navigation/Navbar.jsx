@@ -4,13 +4,19 @@ import { Link } from "react-router-dom"
 import { Menu, Dropdown, Image } from "semantic-ui-react"
 import gravatarUrl from "gravatar-url"
 import PropTypes from "prop-types"
+import { FormattedMessage } from "react-intl"
 import * as actions from "../../store/actions/auth"
 import { allBooksSelector } from "../../store/selectors/books"
+import * as localeActions from "../../store/actions/locale"
 
-const Navbar = ({ user, logout, hasBooks }) => (
+const Navbar = ({
+  user, logout, setLocale, hasBooks,
+}) => (
   <Menu secondary pointing>
     <Menu.Item>
-      <Link to="/dashboard">Dashboard</Link>
+      <Link to="/dashboard">
+        <FormattedMessage id="nav.dashboard" defaultMessage="DEFAULT" />
+      </Link>
     </Menu.Item>
 
     {hasBooks && (
@@ -27,6 +33,25 @@ const Navbar = ({ user, logout, hasBooks }) => (
         alignItems: "center",
       }}
     >
+      <a
+        role="button"
+        className="lang-buttons"
+        onClick={() => {
+          setLocale("en")
+        }}
+      >
+        en
+      </a>
+      {" | "}
+      <a
+        role="button"
+        className="lang-buttons"
+        onClick={() => {
+          setLocale("pt")
+        }}
+      >
+        pt
+      </a>
       <Dropdown trigger={<Image avatar src={gravatarUrl(user.email)} />}>
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => logout()}>Log out</Dropdown.Item>
@@ -42,6 +67,7 @@ Navbar.propTypes = {
   }).isRequired,
   logout: PropTypes.func.isRequired,
   hasBooks: PropTypes.bool.isRequired,
+  setLocale: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = function (state) {
@@ -53,5 +79,5 @@ const mapStateToProps = function (state) {
 
 export default connect(
   mapStateToProps,
-  { logout: actions.logout },
+  { logout: actions.logout, setLocale: localeActions.setLocale },
 )(Navbar)

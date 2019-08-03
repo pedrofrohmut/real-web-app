@@ -1,15 +1,22 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import App from "./App"
+import { setAuthorizationHeaders } from "./utils/authorizationHeaders"
+
+import { addLocaleData } from "react-intl"
+import en from "react-intl/locale-data/en"
+import pt from "react-intl/locale-data/pt"
+
 import { createStore, applyMiddleware } from "redux"
 import { Provider } from "react-redux"
 import { composeWithDevTools } from "redux-devtools-extension"
 import thunk from "redux-thunk"
-import "semantic-ui-css/semantic.min.css"
-import "./index.css"
-import App from "./App"
 import rootReducer from "./store/rootReducer"
 import { userFetched, fetchCurrentUser } from "./store/actions/user"
-import { setAuthorizationHeaders } from "./utils/authorizationHeaders"
+import { localeSet } from "./store/actions/locale"
+
+import "semantic-ui-css/semantic.min.css"
+import "./index.css"
 
 const store = createStore(
   rootReducer,
@@ -22,6 +29,13 @@ if (localStorage.wormbooksJWT) {
 } else {
   store.dispatch(userFetched({}))
 }
+
+if (localStorage.getItem("alhubLang")) {
+  store.dispatch(localeSet(localStorage.getItem("alhubLang")))
+}
+
+addLocaleData(en)
+addLocaleData(pt)
 
 ReactDOM.render(
   <Provider store={store}>

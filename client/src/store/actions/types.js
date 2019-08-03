@@ -8,3 +8,6 @@ export const USER_FETCHED = "USER_FETCHED"
 // Books
 export const BOOKS_FETCH = "BOOKS_FETCH"
 export const BOOK_CREATED = "BOOK_CREATED"
+
+// Locale
+export const LOCALE_SET = "LOCALE_SET"

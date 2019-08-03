@@ -8,30 +8,53 @@ import AddBookCta from "../components/ctas/AddBookCta"
 import * as actions from "../store/actions/books"
 
 class DashboardPage extends React.Component {
-  componentDidMount() {
-    this.onInit(this.props)
+  state = {
+    isLoading: true,
   }
 
-  onInit = props => props.fetchBooks()
+  componentDidMount() {
+    setTimeout(
+      () =>
+        this.props.fetchBooks().then(() =>
+          this.setState(state => ({
+            ...state,
+            isLoading: false,
+          }))),
+      1000,
+    )
+  }
+
+  // componentDidMount() {
+  // this.onInit(this.props)
+  // }
+
+  // onInit = props => props.fetchBooks()
 
   render() {
     const { isConfirmed, books } = this.props
+    const { isLoading } = this.state
 
     return (
       <Container>
         <h1>Dashboard</h1>
 
-        {!isConfirmed && <ConfirmEmailMessage />}
+        {!isLoading && (
+          <>
+            {!isConfirmed && <ConfirmEmailMessage />}
 
-        {isConfirmed && books.length === 0 && (
-          <Message
-            success
-            header="Welcome to the WormBooks"
-            content="Your e-mail is confirmed."
-          />
+            {isConfirmed && books.length === 0 && (
+              <Message
+                success
+                header="Welcome to the WormBooks"
+                content="Your e-mail is confirmed."
+              />
+            )}
+
+            {books.length > 0 ? <p>You have books!</p> : <AddBookCta />}
+          </>
         )}
 
-        {books.length > 0 ? <p>You have books!</p> : <AddBookCta />}
+        {isLoading && <p>Loading...</p>}
       </Container>
     )
   }

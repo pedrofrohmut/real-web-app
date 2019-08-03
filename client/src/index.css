@@ -59,3 +59,8 @@ ul.dev-nav li {
   display: inline;
   margin-right: 15px;
 }
+
+.lang-buttons {
+  padding: 2px 15px;
+  cursor: pointer;
+}
