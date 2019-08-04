@@ -7,7 +7,7 @@
 }
 
 :root {
-  font-size: 18px;
+  font-size: 16px;
   --fullWhite: #fff;
   --fullBlack: #000;
   --grey1: #222;
@@ -36,11 +36,19 @@ p {
   text-align: justify;
 }
 
+.nav-pills p {
+  text-align: center;
+}
+
 a {
   color: var(--grey2);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 300;
   font-size: 1rem;
+}
+
+a.active {
+  font-weight: 900;
 }
 
 ul {
@@ -63,4 +71,6 @@ ul.dev-nav li {
 .lang-buttons {
   padding: 2px 15px;
   cursor: pointer;
+  border: 0;
+  background-color: transparent;
 }

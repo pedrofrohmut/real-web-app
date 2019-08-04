@@ -3,58 +3,24 @@ import { connect } from "react-redux"
 import PropTypes from "prop-types"
 import ConfirmEmailMessage from "../components/messages/ConfirmEmailMessage"
 import { Container, Message } from "semantic-ui-react"
-import { allBooksSelector } from "../store/selectors/books"
-import AddBookCta from "../components/ctas/AddBookCta"
-import * as actions from "../store/actions/books"
 
 class DashboardPage extends React.Component {
-  state = {
-    isLoading: true,
-  }
-
-  componentDidMount() {
-    setTimeout(
-      () =>
-        this.props.fetchBooks().then(() =>
-          this.setState(state => ({
-            ...state,
-            isLoading: false,
-          }))),
-      1000,
-    )
-  }
-
-  // componentDidMount() {
-  // this.onInit(this.props)
-  // }
-
-  // onInit = props => props.fetchBooks()
-
   render() {
-    const { isConfirmed, books } = this.props
-    const { isLoading } = this.state
+    const { isConfirmed } = this.props
 
     return (
       <Container>
         <h1>Dashboard</h1>
 
-        {!isLoading && (
-          <>
-            {!isConfirmed && <ConfirmEmailMessage />}
+        {!isConfirmed && <ConfirmEmailMessage />}
 
-            {isConfirmed && books.length === 0 && (
-              <Message
-                success
-                header="Welcome to the WormBooks"
-                content="Your e-mail is confirmed."
-              />
-            )}
-
-            {books.length > 0 ? <p>You have books!</p> : <AddBookCta />}
-          </>
+        {isConfirmed && (
+          <Message
+            success
+            header="Welcome to the WormBooks"
+            content="Your e-mail is confirmed."
+          />
         )}
-
-        {isLoading && <p>Loading...</p>}
       </Container>
     )
   }
@@ -62,20 +28,10 @@ class DashboardPage extends React.Component {
 
 DashboardPage.propTypes = {
   isConfirmed: PropTypes.bool.isRequired,
-  books: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }).isRequired,
-  ).isRequired,
-  fetchBooks: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   isConfirmed: state.user.isConfirmed,
-  books: allBooksSelector(state),
 })
 
-export default connect(
-  mapStateToProps,
-  { fetchBooks: actions.fetchBooks },
-)(DashboardPage)
+export default connect(mapStateToProps)(DashboardPage)

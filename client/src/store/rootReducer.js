@@ -1,11 +1,11 @@
 import { combineReducers } from "redux"
 
 import userReducer from "./reducers/user"
-import booksReducer from "./reducers/books"
 import localeReducer from "./reducers/locale"
+import charactersReducer from "./reducers/characters"
 
 export default combineReducers({
-  user: userReducer,
-  books: booksReducer,
+  characters: charactersReducer,
   locale: localeReducer,
+  user: userReducer,
 })

@@ -1,29 +1,26 @@
 import React from "react"
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { Menu, Dropdown, Image } from "semantic-ui-react"
 import gravatarUrl from "gravatar-url"
 import PropTypes from "prop-types"
 import { FormattedMessage } from "react-intl"
 import * as actions from "../../store/actions/auth"
-import { allBooksSelector } from "../../store/selectors/books"
 import * as localeActions from "../../store/actions/locale"
 
-const Navbar = ({
-  user, logout, setLocale, hasBooks,
-}) => (
+const Navbar = ({ user, logout, setLocale }) => (
   <Menu secondary pointing>
     <Menu.Item>
-      <Link to="/dashboard">
+      <NavLink to="/dashboard" activeClassName="active">
         <FormattedMessage id="nav.dashboard" defaultMessage="DEFAULT" />
-      </Link>
+      </NavLink>
     </Menu.Item>
 
-    {hasBooks && (
-      <Menu.Item>
-        <Link to="/books/new">Add New Book</Link>
-      </Menu.Item>
-    )}
+    <Menu.Item>
+      <NavLink to="/characters" activeClassName="active">
+        <FormattedMessage id="nav.characters" defaultMessage="DEFAULT" />
+      </NavLink>
+    </Menu.Item>
 
     <Menu.Menu
       position="right"
@@ -33,25 +30,28 @@ const Navbar = ({
         alignItems: "center",
       }}
     >
-      <a
-        role="button"
+      <button
+        type="button"
         className="lang-buttons"
         onClick={() => {
           setLocale("en")
         }}
       >
         en
-      </a>
+      </button>
+
       {" | "}
-      <a
-        role="button"
+
+      <button
+        type="button"
         className="lang-buttons"
         onClick={() => {
           setLocale("pt")
         }}
       >
         pt
-      </a>
+      </button>
+
       <Dropdown trigger={<Image avatar src={gravatarUrl(user.email)} />}>
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => logout()}>Log out</Dropdown.Item>
@@ -66,14 +66,12 @@ Navbar.propTypes = {
     email: PropTypes.string.isRequired,
   }).isRequired,
   logout: PropTypes.func.isRequired,
-  hasBooks: PropTypes.bool.isRequired,
   setLocale: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = function (state) {
   return {
     user: state.user,
-    hasBooks: allBooksSelector(state).length > 0,
   }
 }
 

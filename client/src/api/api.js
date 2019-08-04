@@ -28,13 +28,4 @@ export default {
     fetchCurrentUser: () =>
       axios.get("/api/users/current_user").then(response => response.data.user),
   },
-  books: {
-    fetchAll: () =>
-      axios.get("/api/books").then(response => response.data.books),
-
-    create: newBook =>
-      axios
-        .post("/api/books", { newBook })
-        .then(response => response.data.book),
-  },
 }
