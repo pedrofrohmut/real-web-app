@@ -3,7 +3,6 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import uniqueValidator from "mongoose-unique-validator"
 
-// TODO: to e-mail field => add unique and e-mail valid pattern
 const schema = new mongoose.Schema(
   {
     email: {
