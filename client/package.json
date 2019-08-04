@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.0",
+    "glamor": "^2.20.40",
+    "glamorous": "^5.0.0",
     "gravatar-url": "^3.0.1",
     "jwt-decode": "^2.2.0",
     "lodash": "4.17.13",
@@ -11,6 +13,7 @@
     "normalizr": "^3.4.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-animations": "^1.0.0",
     "react-dom": "^16.8.6",
     "react-intl": "^2.9.0",
     "react-loader": "^2.4.5",

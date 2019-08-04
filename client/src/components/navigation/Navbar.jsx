@@ -54,7 +54,9 @@ const Navbar = ({ user, logout, setLocale }) => (
 
       <Dropdown trigger={<Image avatar src={gravatarUrl(user.email)} />}>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => logout()}>Log out</Dropdown.Item>
+          <Dropdown.Item onClick={() => logout()}>
+            <FormattedMessage id="nav.logout" defaultMessage="DEFAULT" />
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Menu.Menu>
