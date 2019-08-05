@@ -14,14 +14,20 @@ import thunk from "redux-thunk"
 import rootReducer from "./store/rootReducer"
 import { userFetched, fetchCurrentUser } from "./store/actions/user"
 import { localeSet } from "./store/actions/locale"
+import createSagaMiddleware from "redux-saga"
+import rootSaga from "./store/rootSaga"
 
 import "semantic-ui-css/semantic.min.css"
 import "./index.css"
 
+const sagaMiddleware = createSagaMiddleware()
+
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk)),
+  composeWithDevTools(applyMiddleware(sagaMiddleware, thunk)),
 )
+
+sagaMiddleware.run(rootSaga)
 
 if (localStorage.wormbooksJWT) {
   setAuthorizationHeaders(localStorage.wormbooksJWT)

@@ -1,9 +1,11 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import { Form, Button } from "semantic-ui-react"
 import Validator from "validator"
 import PropTypes from "prop-types"
 import InlineError from "../messages/InlineError"
+import { createUserRequest } from "../../store/actions/user"
 
 const isValidEmail = email => Validator.isEmail(email)
 
@@ -35,6 +37,14 @@ class SignupForm extends Component {
     },
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      errors: {
+        global: nextProps.serverErrors,
+      },
+    })
+  }
+
   handleSubmit = (e) => {
     e.preventDefault()
 
@@ -50,13 +60,8 @@ class SignupForm extends Component {
 
     if (!errors.email && !errors.password) {
       this.setState({ loading: true })
-
-      this.props.onSubmit({ email, password }).catch((err) => {
-        this.setState(() => ({
-          errors: { ...err.response.data.errors },
-          loading: false,
-        }))
-      })
+      this.props.onSubmit({ email, password })
+      this.setState({ loading: false })
     }
   }
 
@@ -73,12 +78,16 @@ class SignupForm extends Component {
   render() {
     const { data, loading, errors } = this.state
 
+    console.log(errors.global)
+
     return (
       <Form
         onSubmit={this.handleSubmit}
         loading={loading}
         className="SignupForm"
       >
+        {errors.global.email && <p>{errors.global.email}</p>}
+
         <Form.Field>
           <label htmlFor="email">E-Mail</label>
 
@@ -119,4 +128,11 @@ SignupForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 }
 
-export default SignupForm
+const mapStateToProps = state => ({
+  serverErrors: state.formErrors.signup,
+})
+
+export default connect(
+  mapStateToProps,
+  { onSubmit: createUserRequest },
+)(SignupForm)
