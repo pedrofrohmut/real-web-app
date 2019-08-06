@@ -1,11 +1,10 @@
-import { USER_FETCHED, CREATE_USER_REQUEST, CREATE_USER_FAILURE } from "./types"
-import api from "../../api/api"
-import { userLoggedIn } from "./auth"
-
-export const userFetched = user => ({
-  type: USER_FETCHED,
-  user,
-})
+import {
+  CREATE_USER_REQUEST,
+  CREATE_USER_FAILURE,
+  FETCH_CURRENT_USER_REQUEST,
+  FETCH_CURRENT_USER_SUCCESS,
+  FETCH_CURRENT_USER_FAILURE,
+} from "./types"
 
 export const createUserRequest = user => ({
   type: CREATE_USER_REQUEST,
@@ -17,11 +16,16 @@ export const createUserFailure = errors => ({
   errors,
 })
 
-export const signup = data => dispatch =>
-  api.user.signup(data).then((user) => {
-    localStorage.wormbooksJWT = user.token
-    dispatch(userLoggedIn(user))
-  })
+export const fetchCurrentUserRequest = () => ({
+  type: FETCH_CURRENT_USER_REQUEST,
+})
 
-export const fetchCurrentUser = () => dispatch =>
-  api.user.fetchCurrentUser().then(user => dispatch(userFetched(user)))
+export const fetchCurrentUserSuccess = user => ({
+  type: FETCH_CURRENT_USER_SUCCESS,
+  user,
+})
+
+export const fetchCurrentUserFailure = errors => ({
+  type: FETCH_CURRENT_USER_FAILURE,
+  errors,
+})

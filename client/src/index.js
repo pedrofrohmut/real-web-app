@@ -12,7 +12,7 @@ import { Provider } from "react-redux"
 import { composeWithDevTools } from "redux-devtools-extension"
 import thunk from "redux-thunk"
 import rootReducer from "./store/rootReducer"
-import { userFetched, fetchCurrentUser } from "./store/actions/user"
+import { fetchCurrentUserRequest, fetchCurrentUserSuccess } from "./store/actions/user"
 import { localeSet } from "./store/actions/locale"
 import createSagaMiddleware from "redux-saga"
 import rootSaga from "./store/rootSaga"
@@ -31,9 +31,9 @@ sagaMiddleware.run(rootSaga)
 
 if (localStorage.wormbooksJWT) {
   setAuthorizationHeaders(localStorage.wormbooksJWT)
-  store.dispatch(fetchCurrentUser())
+  store.dispatch(fetchCurrentUserRequest())
 } else {
-  store.dispatch(userFetched({}))
+  store.dispatch(fetchCurrentUserSuccess({}))
 }
 
 if (localStorage.getItem("alhubLang")) {

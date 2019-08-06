@@ -1,4 +1,8 @@
-import { USER_LOGGED_IN, USER_LOGGED_OUT, USER_FETCHED } from "../actions/types"
+import {
+  USER_LOGGED_IN,
+  USER_LOGGED_OUT,
+  FETCH_CURRENT_USER_SUCCESS,
+} from "../actions/types"
 
 const INITIAL_STATE = {
   email: undefined,
@@ -19,7 +23,7 @@ function userReducer(state = INITIAL_STATE, action) {
     case USER_LOGGED_OUT:
       return {}
 
-    case USER_FETCHED:
+    case FETCH_CURRENT_USER_SUCCESS:
       return {
         ...state,
         ...action.user,

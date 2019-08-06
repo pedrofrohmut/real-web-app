@@ -23,13 +23,13 @@ import GuestRoute from "./components/routes/GuestRoute"
 import Navbar from "./components/navigation/Navbar"
 
 const App = ({
-  isAuthenticated, isLoading, lang, fetchCurrentUser,
+  isAuthenticated, isLoading, lang, fetchCurrentUserRequest,
 }) => {
   useEffect(() => {
     if (isAuthenticated) {
-      fetchCurrentUser()
+      fetchCurrentUserRequest()
     }
-  }, [fetchCurrentUser, isAuthenticated])
+  }, [fetchCurrentUserRequest, isAuthenticated])
 
   return (
     <IntlProvider locale={lang} messages={messages[lang]}>
@@ -72,7 +72,7 @@ const App = ({
 
 App.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  fetchCurrentUser: PropTypes.func.isRequired,
+  fetchCurrentUserRequest: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
 }
@@ -85,5 +85,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { fetchCurrentUser: actions.fetchCurrentUser },
+  { fetchCurrentUserRequest: actions.fetchCurrentUserRequest },
 )(App)

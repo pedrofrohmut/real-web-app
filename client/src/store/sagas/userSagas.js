@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects"
 import { userLoggedIn } from "../actions/auth"
-import { createUserFailure } from "../actions/user"
+import { createUserFailure, fetchCurrentUserFailure } from "../actions/user"
 import api from "../../api/api"
 
 export const createUserSaga = function* (action) {
@@ -10,5 +10,14 @@ export const createUserSaga = function* (action) {
     yield put(userLoggedIn(user))
   } catch (err) {
     yield put(createUserFailure(err.response.data.errors))
+  }
+}
+
+export const fetchUserSaga = function* () {
+  try {
+    const user = yield call(api.user.fetchCurrentUser)
+    yield put(userLoggedIn(user))
+  } catch (err) {
+    yield put(fetchCurrentUserFailure(err.response.data.errors))
   }
 }
