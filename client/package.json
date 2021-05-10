@@ -8,7 +8,7 @@
     "glamorous": "^5.0.0",
     "gravatar-url": "^3.0.1",
     "jwt-decode": "^2.2.0",
-    "lodash": "4.17.13",
+    "lodash": "4.17.21",
     "lodash.template": "4.5.0",
     "normalizr": "^3.4.0",
     "prop-types": "^15.7.2",
